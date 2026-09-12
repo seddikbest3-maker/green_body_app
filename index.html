@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>متجري</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f5f6fa;
+      color: #222;
+    }
+
+    header {
+      background: #1e293b;
+      color: white;
+      padding: 18px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 18px;
+      margin-bottom: 15px;
+      border-radius: 15px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      margin: 7px 0;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 10px;
+      background: #2563eb;
+      color: white;
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .scan {
+      background: #16a34a;
+    }
+
+    .total {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      color: #16a34a;
+    }
+
+    .product {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .delete {
+      width: auto;
+      padding: 7px 12px;
+      background: #dc2626;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  🛒 متجري
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2>إضافة منتج</h2>
+
+    <input id="name" type="text" placeholder="اسم المنتج">
+    <input id="price" type="number" placeholder="السعر">
+    <input id="quantity" type="number" value="1" min="1" placeholder="الكمية">
+
+    <button onclick="addProduct()">➕ إضافة المنتج</button>
+
+    <button class="scan" onclick="scanProduct()">
+      📷 سكان المنتج
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>المنتجات</h2>
+    <div id="products"></div>
+  </div>
+
+  <div class="card">
+    <div class="total">
+      المجموع: <span id="total">0</span> دج
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+let products = [];
+
+function addProduct() {
+
+  const name = document.getElementById("name").value;
+  const price = Number(document.getElementById("price").value);
+  const quantity = Number(document.getElementById("quantity").value);
+
+  if (!name || price <= 0 || quantity <= 0) {
+    alert("دخل معلومات المنتج كاملة");
+    return;
+  }
+
+  products.push({
+    name: name,
+    price: price,
+    quantity: quantity
+  });
+
+  document.getElementById("name").value = "";
+  document.getElementById("price").value = "";
+  document.getElementById("quantity").value = "1";
+
+  displayProducts();
+}
+
+function displayProducts() {
+
+  const container = document.getElementById("products");
+  container.innerHTML = "";
+
+  let total = 0;
+
+  products.forEach((product, index) => {
+
+    const subtotal = product.price * product.quantity;
+    total += subtotal;
+
+    container.innerHTML += `
+      <div class="product">
+        <div>
+          <strong>${product.name}</strong><br>
+          ${product.price} دج × ${product.quantity}
+          = ${subtotal} دج
+        </div>
+
+        <button class="delete" onclick="deleteProduct(${index})">
+          حذف
+        </button>
+      </div>
+    `;
+  });
+
+  document.getElementById("total").textContent = total;
+}
+
+function deleteProduct(index) {
+  products.splice(index, 1);
+  displayProducts();
+}
+
+function scanProduct() {
+  alert("📷 خاصية السكان بالكاميرا راح نضيفوها في الخطوة الجاية.");
+}
+
+</script>
+
+</body>
+</html>
